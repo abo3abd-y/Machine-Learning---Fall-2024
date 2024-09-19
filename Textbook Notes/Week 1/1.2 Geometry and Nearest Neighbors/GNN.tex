@@ -1,0 +1,255 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+
+% \usepackage{algorithmicx}
+% \usepackage{algorithm}
+% \usepackage{algorithmic}
+% \usepackage[noend]{algpseudocode}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}  % Instead of algorithmicx + algorithmic
+
+
+\usepackage{float}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\begin{document}
+
+\begin{center}
+    \Huge \textbf{Chapter 3: Geometry and Nearest Neighbors}
+    \vspace{0.7cm}
+\end{center}
+
+\large As we learned in the previous readings, when you have an input that you are trying to analyze to release an output, you could break it down into a colleciton of features.
+This suggests a \textbf{geometric view} of the data where we have on dimension for every feature.
+
+\vspace{0.5cm}
+
+Now that we have them as a geometric view, we can even perform geometric operations on them as well.
+
+\vspace{0.5cm}
+
+We can also compare the predictions that we have. For instance, if Ahmed and Yousef have similar preferences of courses, and we are trying to predict whether Ahmed will like Algorithm.
+But if Ahmed will like Algorithms, then Yousef will probably will, and this is called a \textbf{nearest neighbor}.
+
+\vspace{0.5cm}
+
+\LARGE \textbf{3.1 From Data to Feature Vectors}
+
+\vspace{0.7cm}
+
+\large An example is just a collection of feature values of that example, and this includes a student writing the word "excellant" in a review of a course.
+
+Another feature include the number of exclamation points in the review. Another includes any text that is underlined.
+
+But to a machine learning algorithm, the \textbf{features} themselves have no meaning, but  the \textbf{featuers values} have meanings to the algorithm and how they vary from one example to the other.
+
+\vspace{0.5cm}
+
+Thus, from this prospective, we can say that those feature values can be represented in a vector called \textbf{feature vector} where each dimension is just a feature value.
+
+\vspace{0.5cm}
+
+For example, a student with 3 excellant words, 4 exclamation points, and no underlined text has the following vector form: $\langle 3, 4, 0 \rangle $ and so on as you can imagine.
+
+\vspace{0.5cm}
+
+\textbf{Binary features} , on the other hand, are unique because they only take two distinct values such as 'Yes' or 'No' and 0/1 and so on and we will talk about this later.
+
+\vspace{0.5cm}
+
+But it is hard to convert features values that are of \textbf{catogarical features} type from features to vector form.
+
+\vspace{0.5cm}
+
+For example, if we are determining whether an image is tomato, blueberry, or cucumber, or cockroach, do we classify them based on their colors: red, blue, green, or black?
+
+\vspace{0.5cm}
+
+One might say that we can map the color red to 0, blue to 1, green to 2, and black to 3. But this is not a good way to do this because if we are going to represent them geomtrically using vectors, then we are saying that that category has an order which it does not.
+
+\vspace{0.5cm}
+
+For example, when we use these feature, we will measure examples based on their distances to each other. By doing this mapping, we are essentially saying that red and blue are more similar (distance of 1) than red and black (distance of 3). But, this is probably not what we want to say!
+
+\vspace{0.5cm}
+
+A better solution is to turn this categorical feature into four different binary values: (is it blue?, is it red?, is it green?, is it black?).
+
+\vspace{0.5cm}
+
+Therefore, in general, if we have a categoral feature that takes $V$-values, then we can turn into $V$-many binary indicator values.
+
+\vspace{0.5cm}
+
+Therefore, we have the following things which can be used to map each example to a feature vector:
+
+\begin{itemize}
+    \item Real-valued features get copied directly as we have seen with the review example.
+    \item Binary features become 0 for false and 1 for true.
+    \item categorical features with $V$ possible values get mapped into $V$-many binary indicator features.
+\end{itemize}
+
+
+\vspace{0.5cm}
+
+Therefore, now you can think of a single example as a \textbf{vector} in a \textbf{vector space}.
+
+\vspace{0.5cm}
+
+If you have a category feature and you expanded it into $V$-many binary indicator, then this will be stored in a vector in this form: $x = \langle x_1, x_2, ...., x_D \rangle $ which means that
+the vector space that we are working with will be based on how many D's there are. It is a D-dimension based vector space based on the number of categorical features there are when they are expanded.
+
+\vspace{0.5cm}
+
+\newpage
+
+\LARGE \textbf{3.2: K-Nearest Neighbors}
+
+\vspace{0.7cm}
+
+\large So, the biggest advantage to thinking of examples as vectors is that you can apply geometric concepts to machine learning.
+
+\vspace{0.5cm}
+
+For example, one of the things that you can do in a vector space is compute \textbf{distances}. In two-dimesnional space, the distance between $\langle 2,3 \rangle$ and $\langle 6,1 \rangle $ is: $\sqrt{(2 - 6)^2 + (3 - 1) ^ 2} \thickapprox 4.24. $
+
+\vspace{0.5cm}
+
+But, in general, in any D-dimensional vector space,  the \textbf{Euclidean distance} between vectors $a$ and $b$ is given by the following formula:
+$$d(a,b) = [\sum_{d = 1}^{D} (a_d - b_d)^2 ]^\frac{1}{2} $$
+
+\vspace{0.5cm}
+
+Now that we have all that, consider a vector space where we have a bunch of positive signs and a bunch of negative signs and one question mark sign among them.
+That question mark happens to be among the positive sign bunch, and you are asked to guess the sign of that question mark. What would you say?
+
+\vspace{0.5cm}
+
+You will probably say it is a positive sign, and that is a form of \textbf{inductive bias}. The \textbf{nearest neighbor} classifier is based on this insight.
+
+\vspace{0.5cm}
+
+What you do it simple: you graph the training set and you are given a test set which consists of one member $\hat{x}$. You are trying to predict what $\hat{x}$ so you try to find the closest member of the training set or example $x$ to $\hat{x}$.
+
+\vspace{0.5cm}
+
+So, you basically find the number $x$ that basically minimizes $d(x, \hat{x})$ and that is the intution behind the nearest neighbor classifier.
+
+\vspace{0.5cm}
+
+Despite its simplicity, the nearest neighbor classifier is incredibly effective. However, there is one issue with this. 
+
+Suppose you have a bunch of positive signs clustered together
+and there is one negative sign among those positive charges. Suppose there is a question mark right next to the negative sign, what would the nearest neighbor classifier say?
+
+\vspace{0.5cm}
+
+It would say that the negative sign should be in place of that question mark! However, this is not right since the surrounding signs are positive which is why we have \textbf{k-nearest neighbors}.
+
+\vspace{0.5cm}
+
+If you have 3-nearest neighbors, then we would get 2 positive charges and one negative charge, which means that the question mark will be positive charge because the majority of the closest 3 neigbors are positive.
+
+\vspace{0.5cm}
+
+Before, we write out the algorithm, we have the following convention:
+
+\begin{itemize}
+    \item The training data is denoted by $D$.
+    \item We assume there are $N$-many training examples.
+    \item These examples are pairs: $(x_1, y_1), (x_2,y_2)...., (x_N, y_N).$
+    \item Do not confuse $x_N$ which denotes the $N$th example with $x_d$ which denotes the $d$th feature.
+    \item We also use $[]$ to denote to an empty list and use $\oplus$ to append to the list.
+    \item Our prediction on $\hat{x}$ is $\hat{y}$. 
+\end{itemize}
+
+\vspace{0.5cm}
+
+\newpage
+
+Therefore, we have the following algorithm:
+
+
+\begin{algorithm}
+\caption{KNNN Predict(D, k, $\hat{x}$)}\label{euclid}
+\begin{algorithmic}[1]
+\Procedure{MyProcedure}{}
+\State $S \gets [\hspace{0.5em}]$ %state is just a line in the pseudocode thing
+\For{$n = 1$ \textbf{to} $N$}
+\State $S \gets S \oplus \langle d(x,\hat{x}), n \rangle $ \Comment{store distance to the array}
+\EndFor
+\State $S \gets SORT(S)$ \Comment{sort from lowest to highest}
+\State $\hat{y} \gets 0$
+\For{$k = 1$ \textbf{to} $K$} \Comment{Depends on K: if we want to get the 3 (K = 3) nearest neigbor}
+\State $\langle dist,n \rangle \gets S_k $
+\State $\hat{y} \gets \hat{y} + y_n$ \Comment{Adding the \textit{labels} then assigning}
+\EndFor
+\State $\textbf{return} \hspace{0.5em} \text{SIGN}(\hat{y})$ \Comment{return +1 if $\hat{y} > 0$ and otherwise -1 }
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\vspace{0.5cm}
+
+One flaw with the nearest neighbor classifier is that it treats all features the same weight. Meaning, if your example had very few relevant features and a lot of irrelevant features, then KNNN will preform poorly
+and this is, as mentioned before, is part of \textbf{inductive bias}.
+\vspace{0.5cm}
+
+Another thing is \textbf{feature scale}. If you are trying to decide whether a picture is a floor or a sky, and you are measuring pictures based on their width and height in cm, then KNNN would be fine.
+
+\vspace{0.5cm}
+
+However, if you switched the width to mm, then all the data points will be clustered together which means that KNNN  will preform poorly because it will say that width feature is same as height and will judge mostly on height.
+
+\newpage
+
+\LARGE \textbf{3.3: Decision Bounderies}
+
+\vspace{0.7cm}
+
+\large When you ask yourself: What sort of examples from the test set will be positive or negative, you are essentially saying that there will be regions in the vector space that \textit{would} be positive and some that \textit{would} be negative.
+
+\vspace{0.5cm}
+
+There will also be a solid line seperating the two regions from each other, and that is called \textbf{decision boundary}. On one side is the positive side and the other is the negative side.
+
+\vspace{0.5cm}
+
+The decision boundary allows us to simplify the complexity of the model. If you have a jagged line, then you would be \textit{overfitting} the model and if you have a really simple line then you would be \textit{underfitting} the model.
+
+\vspace{0.5cm}
+
+\newpage
+
+\LARGE \textbf{3.5 Warning: High Dimensions Are Scary}
+
+\vspace{0.7cm}
+
+\large If you have a lot of dimensions, they will be very hard to visualize for humans. Additionally and more importantly, two issues will be born if we were to use KNNN on very large dimensions and those are called \textbf{the curse of dimensionality}: computational and mathematical.
+
+In terms of computationality, it will take \textit{a lot} of time to try to compute the distance of each example in the training set. One solution to this is to divide up the graphing grid into little squares and once you confront with a test data, you calculate which grid that set will be in and then calculate the all of the distances of each example in \textit{that} grid.
+
+\vspace{0.5cm}
+
+For example, if you have a 0.2 x 0.2 grid cell and you are working with 2-dimensional vector space, we can have 25 total grid cells (assuming the range to be from 0 to 1 for simplicity).
+If you have 3-dimensions, then it is 125 = 5 x 5 x 5, and so on.
+
+Each device controller has a 
+
+\vspace{0.5cm}
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,105 @@
+% minimal.tex
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+
+
+\begin{center}
+    \Huge \textbf{1.1 Machine Learning Introduction}
+    \vspace*{0.7cm}
+\end{center}
+
+\large \textbf{Machine Learning: } Machine Learning is about predicting the future based on the past.
+For example, Ahmed watched a bunch of movies in the past and now Machine Learning can predict what his rating on a new movie will be based on the movies he watched.
+
+\vspace{0.5cm}
+
+That can depend on several factors which can include the catogary of the movie, the language, actors and producers, and so on.
+
+\vspace{0.5cm}
+
+\Large \textbf{1.1.1 But what does learning mean?}
+
+\vspace{0.7cm}
+
+\large So, you got a student named Ahmed, but you want to know whether he is good at machine learning or not after taking the whole course, so you decided that you want to give him an exam.
+
+\vspace{0.5cm}
+
+\large But giving him an exam might not be representative of what Ahmed learned in the course because you could give him an exam based entirely on Harry Potter series.
+
+Or you could give him an exam based on the examples you presented in class.
+
+\vspace{0.5cm}
+
+\large So, what you decided to do is you give him an exam with new questions but related concepts that he learned throughout the course. This is what is known as \textbf{Generalization}.
+
+\vspace{0.5cm}
+
+\large After the course is completed, you decided that you want to predict that Ahmed will take in terms of courses in the future based on the courses he took.
+
+Ahmed will rate the courses he took based on a system ranged from 0 (terrible) and 10 (awesome). 
+
+But you cannot ask the system that you created whether Ahmed will like a course based on Harry Potter and you cannot ask it whether Ahmed will like Artificial Intelligence which he took already.
+
+\vspace{0.5cm}
+
+Therefore, the former is expecting the system to generalize \textit{beyond} its experience.
+In the latter, you are expecting the system to not generalize at all.
+
+\vspace{0.5cm}
+
+So, the object that the algorithm will make predictions about is called \textbf{examples.}
+In this case, for example, the pair Ahmed/Algorithm is the example because we are trying to make predictions about them.
+
+\vspace{0.5cm}
+
+Thus, we are given \textbf{training data} from which the algorithm is supposed to learn. This training data is based on, for example, the ratings that Ahmed evaluated on previous courses he took.
+
+\vspace{0.5cm}
+
+Also, the algorithm is supposed to have a function in which it will map new examples to a corresponding prediction.
+
+For example, our function is supposed to guess that $f(\text{Ahmed/Machine Learning})$ is supposed to be high
+because Ahmed very much liked Artificial Intelligence.
+
+\vspace{0.5cm}
+
+Thus, we want our program to make a lot of predictions, but the set on which the algorithm will be evaluated on is called  \textbf{test set}.
+
+\vspace{0.5cm}
+
+The algorithm cannot take a peek at this test set or otherwise it will cheat and not be good.
+
+\newpage
+
+\Huge \textbf{1.2: Some Canonical Learning Problems}
+
+\vspace{0.7cm}
+
+\large \textbf{Regression}: trying to predict a real value. For example, what will be the stock price tomorrow morning.
+
+\vspace{0.5cm}
+
+\textbf{Binary Classification}: trying to predict a simple yes/no question. For example, predict whether Ahmed will like the course or not.
+
+\vspace{0.5cm}
+
+\textbf{Multiclass Classification}: trying to put an example into one of number of classes. For instance, predict whether the news will be about entertainment, sports, politics, etc.
+
+\vspace{0.5cm}
+
+\textbf{Ranking}: predict the ranking of things. For example, predict the ranking of preferences of courses that Ahmed has not taken yet.
+
+\vspace{0.5cm}
+
+The reasno why we are classyfying machine learning problems is because each one of them has a differnet way of predicting the error of predicting things in the future. Regression is different from binary classification and so on.
+
+
+
+
+
+
+
+\end{document}
